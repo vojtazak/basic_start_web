@@ -1,11 +1,11 @@
 import React from 'react';
 
 const images = [
-  { src: '/images/ftp-poster.png', label: 'FTP Poster' },
-  { src: 'https://source.unsplash.com/random/800x1000?sig=2', label: 'Nature Scene' },
-  { src: 'https://source.unsplash.com/random/800x600?sig=3', label: 'Urban' },
-  { src: 'https://source.unsplash.com/random/800x900?sig=4', label: 'Mood' },
-  { src: 'https://source.unsplash.com/random/800x1100?sig=5', label: 'Texture' },
+  { src: '/images/forest.png', label: 'Forest' },
+  { src: '/images/mountains.png', label: 'Mountains' },
+  { src: '/images/city.png', label: 'City' },
+  { src: '/images/farm.png', label: 'Farm' },
+  { src: '/images/countryside.png', label: 'Countryside' },
 ];
 
 const Gallery = () => {
@@ -13,7 +13,7 @@ const Gallery = () => {
     <section className="bg-white py-12">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-gray-900 text-center">
-          Masonry Grid Gallery
+            Gallery examples
         </h2>
 
         <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">

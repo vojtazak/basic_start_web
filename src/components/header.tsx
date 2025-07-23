@@ -1,3 +1,4 @@
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,17 +10,17 @@ const navLinks = [
   { href: '/about', label: 'About' },
 ];
 
-export default function Header() {
+const Header = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="bg-white shadow px-6 py-4">
+    <header className="bg-white/70 backdrop-blur border-b border-gray-200 shadow-md shadow-gray-300/20 px-6 py-4 fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between max-w-6xl mx-auto">
         {/* Left: Site name */}
-        <div className="text-xl font-bold">My Gallery</div>
+        <div className="text-xl font-bold tracking-wide text-gray-900">My Gallery</div>
 
         {/* Desktop menu */}
         <nav className="hidden md:flex space-x-6">
@@ -27,10 +28,10 @@ export default function Header() {
             <Link
               key={href}
               href={href}
-              className={`${
+              className={`transition duration-200 border-b-2 ${
                 isActive(href)
-                  ? 'text-blue-600 font-semibold'
-                  : 'text-gray-700 hover:text-black'
+                  ? 'text-blue-600 font-semibold border-blue-600'
+                  : 'text-gray-700 border-transparent hover:border-black hover:text-black'
               }`}
             >
               {label}
@@ -56,7 +57,7 @@ export default function Header() {
               key={href}
               href={href}
               onClick={() => setMenuOpen(false)}
-              className={`block ${
+              className={`block transition duration-200 ${
                 isActive(href)
                   ? 'text-blue-600 font-semibold'
                   : 'text-gray-700 hover:text-black'
@@ -70,3 +71,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;
