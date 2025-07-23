@@ -60,7 +60,7 @@ export default async function handler(
   try {
     // Smoke test values
     await sendEmail({
-      to: 'test@example.com', // Doesn't have to be real in sandbox
+      to: 'developer@resend.dev', // Doesn't have to be real in sandbox
       subject: 'Resend Smoke Test',
       html: '<p>This is a sandbox test email from Resend.</p>',
     });
