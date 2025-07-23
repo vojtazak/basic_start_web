@@ -1,4 +1,4 @@
-/*import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendEmail } from '@/lib/sendemail';
 
 type ContactRequestBody = {
@@ -28,8 +28,8 @@ export default async function handler(
 
   try {
     await sendEmail({
-      to: process.env.CONTACT_RECEIVER as string,
-      subject: `New contact form submission from ${name}`,
+      to: 'developer@resend.dev', // still sandbox, switch to real later
+      subject: `New message from ${name}`,
       html: `
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
@@ -37,15 +37,17 @@ export default async function handler(
       `,
     });
 
-    return res.status(200).json({ message: 'Email sent (sandbox only — not delivered to inbox)' });
+    return res.status(200).json({ message: '✅ Message sent (sandbox)' });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return res.status(500).json({ message: 'Failed to send email', error: errorMessage });
+    console.error('[Contact Form Error]', error);
+    return res.status(500).json({ message: '❌ Failed to send message', error: errorMessage });
   }
-}*/
+}
 
-/*test code if resend works*/
-import type { NextApiRequest, NextApiResponse } from 'next';
+
+/*test code resend works*/
+/*import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendEmail } from '@/lib/sendemail';
 
 type ResponseData = {
@@ -74,5 +76,5 @@ export default async function handler(
       .status(500)
       .json({ message: '❌ Resend test failed', error: errorMessage });
   }
-}
+}*/
 
