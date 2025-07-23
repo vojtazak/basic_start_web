@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div className="pt-[80px]">
       <Head>
-        <title>My Gallery</title>
+        <title>Home page</title>
       </Head>
       <Header /> {/* top menu */}
       <Bio/> {/* bio */}
