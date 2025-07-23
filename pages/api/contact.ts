@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 
 type ContactRequestBody = {
   name: string;
@@ -27,10 +27,10 @@ export default async function handler(
   }
 
   try {
-    const transporter = nodemailer.createTransport({
+    const transporter: Transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '465'),
-      secure: true, // true for 465, false for 587
+      secure: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
