@@ -1,14 +1,44 @@
-import React from 'react';
+import { useState } from 'react';
 
 const ContactSection = () => {
+  const [status, setStatus] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const formData = {
+      name: data.get('name') as string,
+      email: data.get('email') as string,
+      message: data.get('message') as string,
+    };
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus('✅ Message sent successfully!');
+        form.reset();
+      } else {
+        setStatus('❌ Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setStatus('⚠️ Error sending message.');
+    }
+  };
+
   return (
-    <div id="contact" className="py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Contact Form */}
-        <div className="p-8 rounded-lg shadow-2xl">
-          <h2 className="text-2xl font-extrabold">Contact Us</h2>
-          <form action="#" method="POST" className="mt-6 space-y-6">
+        <div className="p-8 rounded-2xl shadow-md border border-gray-200 bg-white">
+          <h2 className="text-2xl font-extrabold text-gray-900">Contact Us</h2>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium">
                 Name
@@ -17,9 +47,8 @@ const ContactSection = () => {
                 type="text"
                 name="name"
                 id="name"
-                autoComplete="name"
                 required
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
@@ -30,9 +59,8 @@ const ContactSection = () => {
                 type="email"
                 name="email"
                 id="email"
-                autoComplete="email"
                 required
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
@@ -43,47 +71,35 @@ const ContactSection = () => {
                 name="message"
                 id="message"
                 rows={4}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Write your message here"
+                required
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full bg-blue-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Send Message
               </button>
             </div>
+            {status && (
+              <p className="text-sm mt-2 text-center text-gray-700">{status}</p>
+            )}
           </form>
         </div>
 
-        {/* Contact Info */}
-        <div className="p-8 rounded-lg shadow-2xl flex flex-col justify-center">
-          <h2 className="text-2xl font-extrabold">Contact Information</h2>
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 2v6h6M21 13v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8M7 10v6M17 10v6M10 14l2-2 2 2M13 14v6"></path>
-              </svg>
-              <span className="ml-3 text-base">1234 Main St, Anytown, USA</span>
-            </div>
-            <div className="flex items-center">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7 4 7-4M5 6l7-4 7 4M5 10v10l7 4 7-4V10M12 6v10"></path>
-              </svg>
-              <span className="ml-3 text-base">contact@example.com</span>
-            </div>
-            <div className="flex items-center">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h18M9 3v2M15 3v2m-6 16h6M9 12h6m-6 4h6"></path>
-              </svg>
-              <span className="ml-3 text-base">+1 (234) 567-890</span>
-            </div>
+        {/* Optional: Add another column with contact info or image */}
+        <div className="flex flex-col justify-center">
+          <div className="text-lg text-gray-700">
+            <p><strong>Email:</strong> contact@example.com</p>
+            <p><strong>Phone:</strong> +123 456 7890</p>
+            <p><strong>Location:</strong> Prague, Czechia</p>
+            <p className="mt-4">We’d love to hear from you! Whether it's a question, feedback, or a potential collaboration, just drop a message.</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
