@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer, { Transporter } from 'nodemailer';
+import { sendEmail } from '@/lib/sendemail';
 
 type ContactRequestBody = {
   name: string;
@@ -27,33 +27,19 @@ export default async function handler(
   }
 
   try {
-    const transporter: Transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '465'),
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: `"${name}" <${email}>`,
-      to: process.env.CONTACT_RECEIVER,
-      subject: 'New Contact Form Submission',
-      text: message,
+    await sendEmail({
+      to: process.env.CONTACT_RECEIVER as string,
+      subject: `New contact form submission from ${name}`,
       html: `
-        <h2>New message from ${name}</h2>
+        <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br/>')}</p>
+        <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
       `,
     });
 
-    return res.status(200).json({ message: 'Email sent successfully' });
+    return res.status(200).json({ message: 'Email sent (sandbox only — not delivered to inbox)' });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Email error:', errorMessage);
-    return res.status(500).json({ message: 'Email sending failed', error: errorMessage });
+    return res.status(500).json({ message: 'Failed to send email', error: errorMessage });
   }
 }
