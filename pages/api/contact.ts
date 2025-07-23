@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+/*import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendEmail } from '@/lib/sendemail';
 
 type ContactRequestBody = {
@@ -42,4 +42,37 @@ export default async function handler(
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return res.status(500).json({ message: 'Failed to send email', error: errorMessage });
   }
+}*/
+
+/*test code if resend works*/
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { sendEmail } from '@/lib/sendemail';
+
+type ResponseData = {
+  message: string;
+  error?: string;
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  try {
+    // Smoke test values
+    await sendEmail({
+      to: 'test@example.com', // Doesn't have to be real in sandbox
+      subject: 'Resend Smoke Test',
+      html: '<p>This is a sandbox test email from Resend.</p>',
+    });
+
+    return res.status(200).json({ message: '✅ Resend test email sent (sandbox)' });
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    console.error('[Resend Smoke Test Error]', error);
+    return res
+      .status(500)
+      .json({ message: '❌ Resend test failed', error: errorMessage });
+  }
 }
+
