@@ -1,19 +1,32 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+type ContactRequestBody = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+type ResponseData = {
+  message: string;
+  error?: string;
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body as ContactRequestBody;
 
   if (!name || !email || !message) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
   try {
-    // Configure the SMTP transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '465'),
@@ -24,7 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    // Send the email
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
       to: process.env.CONTACT_RECEIVER,
@@ -39,8 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     return res.status(200).json({ message: 'Email sent successfully' });
-  } catch (error: any) {
-    console.error('Email error:', error);
-    return res.status(500).json({ message: 'Email sending failed', error: error.message });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Email error:', err);
+    return res.status(500).json({ message: 'Email sending failed', error: err });
   }
 }
