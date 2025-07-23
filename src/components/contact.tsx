@@ -95,7 +95,7 @@ const ContactSection = () => {
             <p><strong>Email:</strong> contact@example.com</p>
             <p><strong>Phone:</strong> +123 456 7890</p>
             <p><strong>Location:</strong> Prague, Czechia</p>
-            <p className="mt-4">We&apos;d love to hear from you! Whether it's a question, feedback, or a potential collaboration, just drop a message.</p>
+            <p className="mt-4">We&apos;d love to hear from you! Whether it&apos;s a question, feedback, or a potential collaboration, just drop a message.</p>
           </div>
         </div>
       </div>
