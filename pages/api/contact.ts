@@ -52,8 +52,8 @@ export default async function handler(
 
     return res.status(200).json({ message: 'Email sent successfully' });
   } catch (error: unknown) {
-    const err = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Email error:', err);
-    return res.status(500).json({ message: 'Email sending failed', error: err });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Email error:', errorMessage);
+    return res.status(500).json({ message: 'Email sending failed', error: errorMessage });
   }
 }
